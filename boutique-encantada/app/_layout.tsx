@@ -1,0 +1,2 @@
+import { Stack } from 'expo-router'; import { StoreProvider } from '../src/state/Store'; import { colors } from '../src/theme';
+export default function RootLayout(){return <StoreProvider><Stack screenOptions={{headerTintColor:colors.forest,headerStyle:{backgroundColor:colors.cream},contentStyle:{backgroundColor:colors.cream}}}><Stack.Screen name="(tabs)" options={{headerShown:false}}/><Stack.Screen name="plant/[id]" options={{title:'Detalhes da planta'}}/><Stack.Screen name="admin/new" options={{title:'Cadastrar planta',presentation:'modal'}}/></Stack></StoreProvider>}
