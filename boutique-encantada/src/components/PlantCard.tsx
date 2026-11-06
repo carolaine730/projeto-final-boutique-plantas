@@ -1,17 +1,27 @@
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Plant } from '../data/plants';
 import { colors } from '../theme';
+import { getPlantImage } from '../data/productImages';
 
 function money(value: number) { return `R$ ${value.toFixed(2).replace('.', ',')}`; }
+
 
 export function PlantCard({ plant, favorite, onPress, onFavorite }: {
   plant: Plant; favorite: boolean; onPress: () => void; onFavorite: () => void;
 }) {
+  const imageSource = getPlantImage(plant);
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={`Ver ${plant.name}`} style={styles.card} onPress={onPress}>
       <View style={styles.photo}>
-        {plant.imageUrl ? <Image source={{ uri: plant.imageUrl }} style={styles.image} resizeMode="cover" /> : <Text style={styles.emoji}>{plant.emoji || '🪴'}</Text>}
-        <Pressable accessibilityRole="button" accessibilityLabel={favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'} hitSlop={8} onPress={event => { event.stopPropagation(); onFavorite(); }} style={styles.heart}>
+{imageSource ? (
+  <Image
+    source={imageSource}
+    style={styles.image}
+    resizeMode="cover"
+  />
+) : (
+  <Text style={styles.emoji}>{plant.emoji || '🪴'}</Text>
+)}        <Pressable accessibilityRole="button" accessibilityLabel={favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'} hitSlop={8} onPress={event => { event.stopPropagation(); onFavorite(); }} style={styles.heart}>
           <Text style={[styles.heartText, favorite && styles.heartActive]}>{favorite ? '♥' : '♡'}</Text>
         </Pressable>
         {plant.featured ? <View style={styles.tag}><Text style={styles.tagText}>Destaque</Text></View> : null}

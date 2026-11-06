@@ -3,6 +3,7 @@ import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'rea
 import { useStore, usingFirebase } from '../../src/state/Store';
 import { colors } from '../../src/theme';
 const money = (value: number) => `R$ ${value.toFixed(2).replace('.', ',')}`;
+import { getPlantImage } from '../../src/data/productImages';
 
 export default function Cart() {
   const { plants, cart, changeQty, placeOrder } = useStore();
@@ -20,7 +21,17 @@ export default function Cart() {
   return <ScrollView style={styles.page} contentContainerStyle={styles.body}>
     <Text style={styles.title}>Meu carrinho</Text><Text style={styles.subtitle}>Suas escolhas especiais estão aqui.</Text>
     {items.length ? items.map(({ plant, quantity }) => plant ? <View key={plant.id} style={styles.item}>
-      <View style={styles.thumb}>{plant.imageUrl ? <Image source={{ uri: plant.imageUrl }} style={styles.image} /> : <Text style={styles.emoji}>{plant.emoji}</Text>}</View>
+      <View style={styles.thumb}>
+  {getPlantImage(plant) ? (
+    <Image
+      source={getPlantImage(plant)}
+      style={styles.image}
+      resizeMode="cover"
+    />
+  ) : (
+    <Text style={styles.emoji}>{plant.emoji}</Text>
+  )}
+</View>
       <View style={styles.info}><Text style={styles.name}>{plant.name}</Text><Text style={styles.price}>{money(plant.price)}</Text><View style={styles.qty}><Pressable accessibilityLabel="Diminuir quantidade" onPress={() => changeQty(plant.id, -1)}><Text style={styles.qtyText}>−</Text></Pressable><Text style={styles.qtyNumber}>{quantity}</Text><Pressable accessibilityLabel="Aumentar quantidade" onPress={() => changeQty(plant.id, 1)}><Text style={styles.qtyText}>＋</Text></Pressable></View></View>
       <View style={styles.right}><Text style={styles.lineTotal}>{money(plant.price * quantity)}</Text><Pressable onPress={() => changeQty(plant.id, -quantity)}><Text style={styles.remove}>Remover</Text></Pressable></View>
     </View> : null) : <View style={styles.empty}><Text style={{ fontSize: 42 }}>🛍️</Text><Text style={styles.emptyTitle}>Sua sacola está vazia</Text><Text style={styles.emptyCopy}>Escolha suas flores e plantas favoritas para começar.</Text></View>}

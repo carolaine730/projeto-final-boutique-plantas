@@ -15,7 +15,7 @@ export type Plant = {
 // Catálogo inicial de demonstração. Os preços são fictícios e devem ser
 // confirmados pela equipe antes da apresentação/entrega.
 export const demoPlants: Plant[] = [
-  { id: 'suculenta', name: 'Suculenta', scientificName: 'Echeveria spp. (exemplo)', category: 'Plantas', price: 19.90, light: 'Muita claridade e algumas horas de sol suave', water: 'Regue somente quando o substrato estiver seco', description: 'Pequena, charmosa e ótima para decorar mesas, prateleiras e pequenos espaços.', emoji: '🌵', featured: true },
+  { id: 'suculenta', name: 'Suculenta', scientificName: 'Echeveria spp. (exemplo)', category: 'Suculentas', price: 19.90, light: 'Muita claridade e algumas horas de sol suave', water: 'Regue somente quando o substrato estiver seco', description: 'Pequena, charmosa e ótima para decorar mesas, prateleiras e pequenos espaços.', emoji: '🌵', featured: true },
   { id: 'pomo-de-adao', name: 'Pomo de adão', scientificName: 'Espécie a confirmar', category: 'Plantas', price: 69.90, light: 'Luz indireta e ambiente bem iluminado', water: 'Ajustar conforme a espécie identificada', description: 'Item solicitado para o catálogo. A espécie botânica precisa ser confirmada pela equipe antes da publicação.', emoji: '🌿' },
   { id: 'orquidea', name: 'Orquídea', scientificName: 'Phalaenopsis spp. (exemplo)', category: 'Flores', price: 89.90, light: 'Luz indireta e ambiente ventilado', water: 'Regue quando o substrato estiver quase seco; evite encharcar', description: 'Flores delicadas e elegantes que trazem cor e sofisticação para o ambiente.', emoji: '🌸', featured: true },
   { id: 'lirio', name: 'Lírio', scientificName: 'Lilium spp.', category: 'Flores', price: 49.90, light: 'Local claro, evitando sol forte nas horas quentes', water: 'Mantenha o substrato levemente úmido', description: 'Flor marcante e perfumada, ideal para composições delicadas.', emoji: '🤍' },
@@ -27,4 +27,11 @@ export const demoPlants: Plant[] = [
   { id: 'girassol', name: 'Girassol', scientificName: 'Helianthus annuus', category: 'Flores', price: 29.90, light: 'Sol direto por várias horas ao dia', water: 'Regue regularmente, sem encharcar', description: 'Uma flor alegre e luminosa que deixa qualquer espaço mais acolhedor.', emoji: '🌻', featured: true },
 ];
 
-export const plantCategories = ['Todas', 'Flores', 'Plantas', 'Pendentes', 'Acessórios'];
+export const plantCategories = [
+  'Todas',
+  'Flores',
+  'Plantas',
+  'Suculentas',
+  'Pendentes',
+  'Acessórios',
+];

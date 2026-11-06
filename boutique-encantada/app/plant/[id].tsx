@@ -2,6 +2,8 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useStore } from '../../src/state/Store';
 import { colors } from '../../src/theme';
+import { getPlantImage } from '../../src/data/productImages';
+
 const money = (value: number) => `R$ ${value.toFixed(2).replace('.', ',')}`;
 export default function PlantDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -9,8 +11,9 @@ export default function PlantDetails() {
   const plant = plants.find(item => item.id === id);
   if (!plant) return <View style={styles.page}><Text style={styles.notFound}>Não encontramos essa planta no catálogo.</Text></View>;
   const favorite = favorites.includes(plant.id);
+  const imageSource = getPlantImage(plant);
   return <ScrollView style={styles.page} contentContainerStyle={styles.body}>
-    <View style={styles.photo}>{plant.imageUrl ? <Image source={{ uri: plant.imageUrl }} style={styles.image} resizeMode="cover" /> : <Text style={styles.emoji}>{plant.emoji || '🪴'}</Text>}<Pressable style={styles.heart} onPress={() => toggleFavorite(plant.id)}><Text style={{ color: favorite ? colors.danger : colors.forest, fontSize: 24 }}>{favorite ? '♥' : '♡'}</Text></Pressable></View>
+    <View style={styles.photo}>{imageSource ? <Image source={imageSource} style={styles.image} resizeMode="cover" /> : <Text style={styles.emoji}>{plant.emoji || '🪴'}</Text>}<Pressable style={styles.heart} onPress={() => toggleFavorite(plant.id)}><Text style={{ color: favorite ? colors.danger : colors.forest, fontSize: 24 }}>{favorite ? '♥' : '♡'}</Text></Pressable></View>
     <Text style={styles.category}>{plant.category.toUpperCase()}</Text><Text style={styles.title}>{plant.name}</Text><Text style={styles.scientific}>{plant.scientificName}</Text><Text style={styles.price}>{money(plant.price)}</Text><Text style={styles.desc}>{plant.description}</Text>
     <View style={styles.care}><Text style={styles.careTitle}>☀️  Iluminação</Text><Text style={styles.careText}>{plant.light}</Text><View style={styles.divider}/><Text style={styles.careTitle}>💧  Rega</Text><Text style={styles.careText}>{plant.water}</Text></View>
     <Pressable style={styles.buy} onPress={() => { addToCart(plant.id); router.push('/(tabs)/cart'); }}><Text style={styles.buyText}>＋  Adicionar à sacola</Text></Pressable>
