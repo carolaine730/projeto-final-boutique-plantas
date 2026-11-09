@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Raiz & Folha",
+    "slug": "raiz-e-folha",
+    "scheme": "raizefolha",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-router", ["expo-image-picker", { "photosPermission": "A Raiz & Folha usa suas fotos para cadastrar imagens de plantas." }]],
+    "experiments": { "typedRoutes": true }
+  }
+}

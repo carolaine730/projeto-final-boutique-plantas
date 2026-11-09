@@ -1,0 +1,1 @@
+export const colors = { forest: '#244638', leaf: '#5D8063', sage: '#E5EBDD', cream: '#F8F7F1', paper: '#FFFFFF', ink: '#24332B', muted: '#788078', line: '#E5E8E0', peach: '#F3E3D5', danger: '#B64E43' };
