@@ -25,8 +25,33 @@ export default function Home() {
     <View style={styles.hero}><Text style={styles.heroKicker}>FLORES PARA ENCANTAR</Text><Text style={styles.heroTitle}>Um jardim cheio de beleza para chamar de seu.</Text><Text style={styles.heroCopy}>Encontre flores e plantas escolhidas com carinho.</Text><Pressable style={styles.heroButton} onPress={() => { setCategory('Todas'); setSearch(''); }}><Text style={styles.heroButtonText}>Explorar catálogo  →</Text></Pressable></View>
     <Text style={styles.heading}>Explore por categoria</Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>{plantCategories.map(item => <Pressable key={item} onPress={() => setCategory(item)} style={[styles.chip, category === item && styles.chipOn]}><Text style={[styles.chipText, category === item && styles.chipTextOn]}>{item}</Text></Pressable>)}</ScrollView>
-    {featured.length > 0 && category === 'Todas' && !search ? <><View style={styles.sectionRow}><Text style={styles.heading}>Destaques da boutique</Text><Text style={styles.count}>{featured.length} produtos</Text></View><View style={styles.grid}>{featured.slice(0, 4).map(plant => <PlantCard key={plant.id} plant={plant} favorite={favorites.includes(plant.id)} onPress={() => router.push(`/plant/${plant.id}`)} onFavorite={() => toggleFavorite(plant.id)} />)}</View></> : null}
-    <View style={styles.sectionRow}><Text style={styles.heading}>Nosso jardim</Text><Text style={styles.count}>{filtered.length} opções</Text></View>
+{featured.length > 0 && category === 'Todas' && !search ? (
+  <View style={styles.featuredSection}>
+    <Text style={styles.heading}>Seleção em destaque ✨</Text>
+
+    <Text style={styles.featuredDescription}>
+      Algumas escolhas da boutique. Veja todos os produtos abaixo.
+    </Text>
+
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.featuredList}
+    >
+      {featured.slice(0, 4).map(plant => (
+        <View key={plant.id} style={styles.featuredItem}>
+          <PlantCard
+            fullWidth
+            plant={plant}
+            favorite={favorites.includes(plant.id)}
+            onPress={() => router.push(`/plant/${plant.id}`)}
+            onFavorite={() => toggleFavorite(plant.id)}
+          />
+        </View>
+      ))}
+    </ScrollView>
+  </View>
+) : null}    <View style={styles.sectionRow}><Text style={styles.heading}>Catálogo completo</Text><Text style={styles.count}>{filtered.length} produtos</Text></View>
     {filtered.length ? <View style={styles.grid}>{filtered.map(plant => <PlantCard key={plant.id} plant={plant} favorite={favorites.includes(plant.id)} onPress={() => router.push(`/plant/${plant.id}`)} onFavorite={() => toggleFavorite(plant.id)} />)}</View> : <Text style={styles.empty}>Não encontramos plantas com essa busca. Tente outro nome ou categoria.</Text>}
   </ScrollView>;
 }
@@ -40,4 +65,22 @@ const styles = StyleSheet.create({
   hero: { backgroundColor: colors.forest, borderRadius: 22, padding: 21, marginBottom: 23 }, heroKicker: { color: '#EAD8E7', fontSize: 10, letterSpacing: 1.8, fontWeight: '800' }, heroTitle: { color: colors.paper, fontSize: 25, lineHeight: 31, fontWeight: '800', marginTop: 9, maxWidth: 300 }, heroCopy: { color: '#F4EAF1', fontSize: 13, lineHeight: 19, marginTop: 8 }, heroButton: { alignSelf: 'flex-start', marginTop: 16, backgroundColor: colors.sage, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }, heroButtonText: { color: colors.forest, fontWeight: '800', fontSize: 12 },
   heading: { fontSize: 18, color: colors.forest, fontWeight: '800', marginBottom: 12 }, chips: { gap: 8, paddingBottom: 18 }, chip: { backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 20 }, chipOn: { backgroundColor: colors.forest, borderColor: colors.forest }, chipText: { color: colors.ink, fontSize: 12, fontWeight: '600' }, chipTextOn: { color: colors.paper },
   sectionRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }, count: { color: colors.muted, fontSize: 12, marginBottom: 12 }, grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }, empty: { textAlign: 'center', color: colors.muted, paddingVertical: 35, lineHeight: 21 },
+  featuredSection: {
+  backgroundColor: colors.sage,
+  borderRadius: 22,
+  padding: 16,
+  marginBottom: 28,
+},
+featuredDescription: {
+  color: colors.forest,
+  fontSize: 13,
+  lineHeight: 19,
+  marginBottom: 16,
+},
+featuredList: {
+  gap: 14,
+},
+featuredItem: {
+  width: 180,
+},
 });

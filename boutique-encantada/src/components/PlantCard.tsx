@@ -6,18 +6,28 @@ import { getPlantImage } from '../data/productImages';
 function money(value: number) { return `R$ ${value.toFixed(2).replace('.', ',')}`; }
 
 
-export function PlantCard({ plant, favorite, onPress, onFavorite }: {
-  plant: Plant; favorite: boolean; onPress: () => void; onFavorite: () => void;
+export function PlantCard({
+  plant,
+  favorite,
+  onPress,
+  onFavorite,
+  fullWidth = false,
+}: {
+  plant: Plant;
+  favorite: boolean;
+  onPress: () => void;
+  onFavorite: () => void;
+  fullWidth?: boolean;
 }) {
   const imageSource = getPlantImage(plant);
   return (
-    <Pressable accessibilityRole="button" accessibilityLabel={`Ver ${plant.name}`} style={styles.card} onPress={onPress}>
+    <Pressable accessibilityRole="button" accessibilityLabel={`Ver ${plant.name}`} style={[styles.card, fullWidth && { width: '100%' }]} onPress={onPress}>
       <View style={styles.photo}>
 {imageSource ? (
   <Image
     source={imageSource}
     style={styles.image}
-    resizeMode="cover"
+    resizeMode="contain"
   />
 ) : (
   <Text style={styles.emoji}>{plant.emoji || '🪴'}</Text>
@@ -34,7 +44,7 @@ export function PlantCard({ plant, favorite, onPress, onFavorite }: {
 }
 const styles = StyleSheet.create({
   card: { width: '48%', marginBottom: 18 },
-  photo: { height: 155, backgroundColor: colors.sage, borderRadius: 17, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  photo: {aspectRatio: 2 / 3, backgroundColor: colors.cream, borderRadius: 17, alignItems: 'center', justifyContent: 'center', overflow: 'hidden'},  
   image: { width: '100%', height: '100%' }, emoji: { fontSize: 64 },
   heart: { position: 'absolute', right: 9, top: 9, width: 34, height: 34, borderRadius: 17, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
   heartText: { fontSize: 20, color: colors.forest }, heartActive: { color: colors.danger },
