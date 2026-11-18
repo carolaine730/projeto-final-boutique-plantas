@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -76,8 +77,12 @@ export default function Profile() {
       contentContainerStyle={styles.body}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.logo}>🌷</Text>
-      <Text style={styles.title}>Boutique Encantada</Text>
+<Image
+  source={require('../../assets/images/logo-boutique.png')}
+  style={styles.logo}
+  resizeMode="contain"
+  accessibilityLabel="Logo da Boutique Encantada"
+/>      <Text style={styles.title}>Boutique Encantada</Text>
       <Text style={styles.sub}>
         Flores que encantam, cuidado que floresce.
       </Text>
@@ -209,10 +214,14 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     alignItems: 'center',
   },
-  logo: {
-    fontSize: 55,
-    marginTop: 15,
-  },
+ logo: {
+  width: 180,
+  height: 180,
+  borderRadius: 90,
+  overflow: 'hidden',
+  marginTop: 15,
+  marginBottom: 8,
+},
   title: {
     fontSize: 26,
     fontWeight: '800',

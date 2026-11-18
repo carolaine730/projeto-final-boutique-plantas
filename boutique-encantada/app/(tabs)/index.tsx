@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { PlantCard } from '../../src/components/PlantCard';
 import { plantCategories } from '../../src/data/plants';
@@ -46,7 +46,11 @@ export default function Home() {
           style={styles.avatar}
           onPress={() => router.push('/(tabs)/profile')}
         >
-          <Text style={{ fontSize: 22 }}>🌷</Text>
+          <Image
+  source={require('../../assets/images/logo-boutique.png')}
+  style={styles.avatarImage}
+  resizeMode="contain"
+/>
         </Pressable>
       </View>
 
@@ -163,8 +167,19 @@ const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.cream }, content: { padding: 19, paddingBottom: 32 },
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 17 },
   kicker: { fontSize: 10, letterSpacing: 2, color: colors.leaf, fontWeight: '800' }, brand: { fontSize: 23, color: colors.forest, fontWeight: '800', marginTop: 4 },
-  avatar: { width: 43, height: 43, borderRadius: 22, backgroundColor: colors.sage, alignItems: 'center', justifyContent: 'center' },
-  welcome: { fontSize: 22, color: colors.forest, fontWeight: '800', marginBottom: 15 },
+avatar: {
+  width: 52,
+  height: 52,
+  borderRadius: 26,
+  backgroundColor: colors.cream,
+  alignItems: 'center',
+  justifyContent: 'center',
+  overflow: 'hidden',
+},
+avatarImage: {
+  width: '100%',
+  height: '100%',
+},  welcome: { fontSize: 22, color: colors.forest, fontWeight: '800', marginBottom: 15 },
   searchWrap: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: 15, paddingHorizontal: 13, marginBottom: 17 }, searchIcon: { fontSize: 25, color: colors.muted }, search: { flex: 1, paddingVertical: 13, paddingHorizontal: 8, color: colors.ink, fontSize: 14 },
   hero: { backgroundColor: colors.forest, borderRadius: 22, padding: 21, marginBottom: 23 }, heroKicker: { color: '#EAD8E7', fontSize: 10, letterSpacing: 1.8, fontWeight: '800' }, heroTitle: { color: colors.paper, fontSize: 25, lineHeight: 31, fontWeight: '800', marginTop: 9, maxWidth: 300 }, heroCopy: { color: '#F4EAF1', fontSize: 13, lineHeight: 19, marginTop: 8 }, heroButton: { alignSelf: 'flex-start', marginTop: 16, backgroundColor: colors.sage, paddingHorizontal: 15, paddingVertical: 10, borderRadius: 20 }, heroButtonText: { color: colors.forest, fontWeight: '800', fontSize: 12 },
   heading: { fontSize: 18, color: colors.forest, fontWeight: '800', marginBottom: 12 }, chips: { gap: 8, paddingBottom: 18 }, chip: { backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 14, paddingVertical: 9, borderRadius: 20 }, chipOn: { backgroundColor: colors.forest, borderColor: colors.forest }, chipText: { color: colors.ink, fontSize: 12, fontWeight: '600' }, chipTextOn: { color: colors.paper },

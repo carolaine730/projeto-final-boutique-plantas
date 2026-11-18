@@ -1,6 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously } from 'firebase/auth';
+import { signInAnonymously } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { createAuthClient } from './authClient';
 
 const config = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -20,7 +21,7 @@ export const firebaseApp = firebaseReady
   : null;
 
 export const db = firebaseApp ? getFirestore(firebaseApp) : null;
-export const auth = firebaseApp ? getAuth(firebaseApp) : null;
+export const auth = firebaseApp ? createAuthClient(firebaseApp) : null;
 
 export async function authenticateVisitor() {
   if (!auth) {

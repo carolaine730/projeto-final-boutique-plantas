@@ -19,8 +19,85 @@ export const plantCategories = [
   'Suculentas',
 ];
 
-// Preços fictícios para demonstração acadêmica.
-// Identificação botânica e cuidados serão revisados pela equipe.
+type PlantCare = Pick<Plant, 'scientificName' | 'light' | 'water'>;
+
+const cutFlowerCare = {
+  light: 'Mantenha em local fresco e iluminado, sem sol direto e longe de fontes de calor.',
+  water: 'Use um recipiente limpo, mantenha água fresca e retire folhas que ficariam submersas. Renove a água regularmente.',
+};
+
+const orchidCare: PlantCare = {
+  scientificName: 'Phalaenopsis — híbridos ornamentais',
+  light: 'Prefere bastante luz indireta. Evite sol forte diretamente nas folhas.',
+  water: 'Regue quando o substrato estiver próximo de secar e deixe a água escorrer. Não mantenha as raízes submersas nem acumule água no centro das folhas.',
+};
+
+const careById: Record<string, PlantCare> = {
+  suculenta: {
+    scientificName: 'Composição de diferentes suculentas',
+    light: 'Prefere ambiente muito iluminado. A exposição ao sol depende das espécies presentes no arranjo.',
+    water: 'Confira a umidade antes de regar e deixe o substrato secar entre as regas. Utilize vasos com drenagem e evite água acumulada.',
+  },
+  'costela-de-adao': {
+    scientificName: 'Monstera deliciosa',
+    light: 'Prefere luz indireta e ambiente iluminado. Evite sol forte diretamente nas folhas.',
+    water: 'Regue quando a camada superficial do substrato estiver seca. Deixe o excesso escorrer e esvazie o pratinho.',
+  },
+  'comigo-ninguem-pode': {
+    scientificName: 'Dieffenbachia spp.',
+    light: 'Cultive em ambiente iluminado, com luz indireta.',
+    water: 'Deixe a superfície do substrato secar entre as regas. Evite encharcamento e água parada no pratinho.',
+  },
+  'palmeira-ornamental': {
+    scientificName: 'Arecaceae — palmeira ornamental',
+    light: 'Mantenha em local com luz indireta abundante. A tolerância ao sol varia conforme a espécie.',
+    water: 'Confira a umidade do substrato antes de regar. Mantenha boa drenagem e evite deixar o vaso dentro de água.',
+  },
+  'orquidea-lilas': orchidCare,
+  'orquidea-branca': orchidCare,
+  orquidea: orchidCare,
+  'lirios-mesclados': {
+    scientificName: 'Lilium spp. — flores cortadas',
+    ...cutFlowerCare,
+  },
+  lirio: {
+    scientificName: 'Lilium spp.',
+    light: 'Cultive em local bem iluminado, com sol ou meia-sombra, protegendo o vaso do calor excessivo.',
+    water: 'Mantenha o substrato levemente úmido e bem drenado, sem deixar o vaso encharcado.',
+  },
+  'copo-de-leite': {
+    scientificName: 'Zantedeschia aethiopica — flores cortadas',
+    ...cutFlowerCare,
+  },
+  'anturio-vermelho': {
+    scientificName: 'Anthurium — híbridos ornamentais',
+    light: 'Prefere luz indireta abundante. Evite sol forte nas folhas.',
+    water: 'Regue quando a superfície do substrato começar a secar. Deixe escorrer e evite água acumulada.',
+  },
+  tulipas: {
+    scientificName: 'Tulipa spp. — flores cortadas',
+    ...cutFlowerCare,
+  },
+  'tulipas-laranjas': {
+    scientificName: 'Tulipa spp. — flores cortadas',
+    ...cutFlowerCare,
+  },
+  peonias: {
+    scientificName: 'Paeonia spp.',
+    light: 'Prefere cultivo externo com boa exposição ao sol. A adaptação e a floração dependem da espécie e do clima.',
+    water: 'Mantenha o solo com umidade adequada e boa drenagem. Evite tanto o encharcamento quanto o ressecamento prolongado.',
+  },
+  rosas: {
+    scientificName: 'Rosa — híbridos ornamentais',
+    light: 'Prefere ambiente externo com boa exposição ao sol e circulação de ar.',
+    water: 'Confira a umidade diariamente em períodos quentes. Regue o substrato antes que resseque completamente e deixe o excesso escorrer.',
+  },
+  girassol: {
+    scientificName: 'Helianthus annuus — flores cortadas',
+    ...cutFlowerCare,
+  },
+};
+
 function product(
   id: string,
   name: string,
@@ -36,9 +113,7 @@ function product(
     price,
     description,
     featured,
-    scientificName: 'Identificação botânica em revisão',
-    light: 'Orientação de iluminação em revisão.',
-    water: 'Orientação de conservação e rega em revisão.',
+    ...careById[id],
     emoji: category === 'Flores' ? '🌸' : '🪴',
   };
 }
