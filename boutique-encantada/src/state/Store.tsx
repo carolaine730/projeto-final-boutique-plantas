@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addDoc, collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { createContext, PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
 import { demoPlants, Plant } from '../data/plants';
-import { db, firebaseReady } from '../services/firebase';
+import { authenticateVisitor, db, firebaseReady } from '../services/firebase';
 
 type Store = {
   plants: Plant[]; favorites: string[]; cart: Record<string, number>; loading: boolean;
@@ -66,16 +66,56 @@ export function StoreProvider({ children }: PropsWithChildren) {
       setFavorites(current => current.filter(item => item !== id));
       setCart(current => { const next = { ...current }; delete next[id]; return next; });
     },
-    placeOrder: async () => {
-      if (!db) throw new Error('Firebase não configurado. O pedido não foi enviado.');
+        placeOrder: async () => {
+      if (!db) {
+        throw new Error('Firebase não configurado. O pedido não foi enviado.');
+      }
+
+      const user = await authenticateVisitor();
+
       const items = Object.entries(cart).map(([id, quantity]) => {
         const plant = plants.find(item => item.id === id);
-        if (!plant) throw new Error(`Produto ${id} não está mais disponível.`);
-        return { plantId: id, plantName: plant.name, unitPrice: plant.price, quantity, lineTotal: plant.price * quantity };
+
+        if (!plant) {
+          throw new Error(`Produto ${id} não está mais disponível.`);
+        }
+
+        if (!Number.isInteger(quantity) || quantity <= 0) {
+          throw new Error('Quantidade inválida na sacola.');
+        }
+
+        if (!Number.isFinite(plant.price) || plant.price <= 0) {
+          throw new Error(`Preço inválido para ${plant.name}.`);
+        }
+
+        const unitPriceInCents = Math.round(plant.price * 100);
+
+        return {
+          plantId: id,
+          plantName: plant.name,
+          unitPrice: unitPriceInCents / 100,
+          quantity,
+          lineTotal: (unitPriceInCents * quantity) / 100,
+        };
       });
-      if (!items.length) throw new Error('A sacola está vazia.');
-      const total = items.reduce((sum, item) => sum + item.lineTotal, 0);
-      await addDoc(collection(db, 'orders'), { items, total, createdAt: serverTimestamp(), status: 'recebido' });
+
+      if (!items.length) {
+        throw new Error('A sacola está vazia.');
+      }
+
+      const totalInCents = items.reduce(
+        (sum, item) => sum + Math.round(item.lineTotal * 100),
+        0
+      );
+
+      await addDoc(collection(db, 'orders'), {
+        userId: user.uid,
+        items,
+        total: totalInCents / 100,
+        createdAt: serverTimestamp(),
+        status: 'recebido',
+      });
+
       setCart({});
     },
   }), [plants, favorites, cart, loading]);
