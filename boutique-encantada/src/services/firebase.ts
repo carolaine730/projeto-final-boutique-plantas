@@ -1,5 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
+import { signInAnonymously } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { createAuthClient } from './authClient';
 
 const config = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -10,8 +12,26 @@ const config = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
-export const firebaseReady = Boolean(config.apiKey && config.projectId && config.appId);
+export const firebaseReady = Boolean(
+  config.apiKey && config.projectId && config.appId
+);
+
 export const firebaseApp = firebaseReady
   ? (getApps().length ? getApp() : initializeApp(config))
   : null;
+
 export const db = firebaseApp ? getFirestore(firebaseApp) : null;
+export const auth = firebaseApp ? createAuthClient(firebaseApp) : null;
+
+export async function authenticateVisitor() {
+  if (!auth) {
+    throw new Error('Firebase não configurado.');
+  }
+
+  await auth.authStateReady();
+
+  if (auth.currentUser) return auth.currentUser;
+
+  const credential = await signInAnonymously(auth);
+  return credential.user;
+}
