@@ -11,49 +11,153 @@ export default function Home() {
   const { plants, favorites, toggleFavorite } = useStore();
   const [category, setCategory] = useState('Todas');
   const [search, setSearch] = useState('');
-  const filtered = useMemo(() => plants.filter(plant => (category === 'Todas' || plant.category === category) && `${plant.name} ${plant.category} ${plant.scientificName}`.toLowerCase().includes(search.trim().toLowerCase())), [plants, category, search]);
-  const featured = plants.filter(plant => plant.featured);
   const insets = useSafeAreaInsets();
 
-  return <ScrollView style={styles.page} contentContainerStyle={[
-  styles.content,
-  { paddingTop: insets.top + 19 },
-]} keyboardShouldPersistTaps="handled">
-    <View style={styles.top}><View><Text style={styles.kicker}>UM JARDIM DE AFETO</Text><Text style={styles.brand}>Boutique Encantada</Text></View><Pressable accessibilityLabel="Abrir perfil" style={styles.avatar} onPress={() => router.push('/(tabs)/profile')}><Text style={{ fontSize: 22 }}>🌷</Text></Pressable></View>
-    <Text style={styles.welcome}>Olá, seja bem-vinda!</Text>
-    <View style={styles.searchWrap}><Text style={styles.searchIcon}>⌕</Text><TextInput value={search} onChangeText={setSearch} placeholder="O que você procura?" placeholderTextColor={colors.muted} style={styles.search} returnKeyType="search" /></View>
-    <View style={styles.hero}><Text style={styles.heroKicker}>FLORES PARA ENCANTAR</Text><Text style={styles.heroTitle}>Um jardim cheio de beleza para chamar de seu.</Text><Text style={styles.heroCopy}>Encontre flores e plantas escolhidas com carinho.</Text><Pressable style={styles.heroButton} onPress={() => { setCategory('Todas'); setSearch(''); }}><Text style={styles.heroButtonText}>Explorar catálogo  →</Text></Pressable></View>
-    <Text style={styles.heading}>Explore por categoria</Text>
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>{plantCategories.map(item => <Pressable key={item} onPress={() => setCategory(item)} style={[styles.chip, category === item && styles.chipOn]}><Text style={[styles.chipText, category === item && styles.chipTextOn]}>{item}</Text></Pressable>)}</ScrollView>
-{featured.length > 0 && category === 'Todas' && !search ? (
-  <View style={styles.featuredSection}>
-    <Text style={styles.heading}>Seleção em destaque ✨</Text>
+  const filtered = useMemo(
+    () =>
+      plants.filter(
+        plant =>
+          (category === 'Todas' || plant.category === category) &&
+          `${plant.name} ${plant.category} ${plant.scientificName}`
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+      ),
+    [plants, category, search]
+  );
 
-    <Text style={styles.featuredDescription}>
-      Algumas escolhas da boutique. Veja todos os produtos abaixo.
-    </Text>
+  const featured = plants.filter(plant => plant.featured);
 
+  return (
     <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.featuredList}
+      style={styles.page}
+      contentContainerStyle={[
+        styles.content,
+        { paddingTop: insets.top + 19 },
+      ]}
+      keyboardShouldPersistTaps="handled"
     >
-      {featured.slice(0, 4).map(plant => (
-        <View key={plant.id} style={styles.featuredItem}>
-          <PlantCard
-            fullWidth
-            plant={plant}
-            favorite={favorites.includes(plant.id)}
-            onPress={() => router.push(`/plant/${plant.id}`)}
-            onFavorite={() => toggleFavorite(plant.id)}
-          />
+      <View style={styles.top}>
+        <View>
+          <Text style={styles.kicker}>UM JARDIM DE AFETO</Text>
+          <Text style={styles.brand}>Boutique Encantada</Text>
         </View>
-      ))}
+        <Pressable
+          accessibilityLabel="Abrir perfil"
+          style={styles.avatar}
+          onPress={() => router.push('/(tabs)/profile')}
+        >
+          <Text style={{ fontSize: 22 }}>🌷</Text>
+        </Pressable>
+      </View>
+
+      <Text style={styles.welcome}>Olá, seja bem-vinda!</Text>
+
+      <View style={styles.searchWrap}>
+        <Text style={styles.searchIcon}>⌕</Text>
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="O que você procura?"
+          placeholderTextColor={colors.muted}
+          style={styles.search}
+          returnKeyType="search"
+        />
+      </View>
+
+      <View style={styles.hero}>
+        <Text style={styles.heroKicker}>FLORES PARA ENCANTAR</Text>
+        <Text style={styles.heroTitle}>
+          Um jardim cheio de beleza para chamar de seu.
+        </Text>
+        <Text style={styles.heroCopy}>
+          Encontre flores e plantas escolhidas com carinho.
+        </Text>
+        <Pressable
+          style={styles.heroButton}
+          onPress={() => {
+            setCategory('Todas');
+            setSearch('');
+          }}
+        >
+          <Text style={styles.heroButtonText}>Explorar catálogo →</Text>
+        </Pressable>
+      </View>
+
+      <Text style={styles.heading}>Explore por categoria</Text>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.chips}
+      >
+        {plantCategories.map(item => (
+          <Pressable
+            key={item}
+            onPress={() => setCategory(item)}
+            style={[styles.chip, category === item && styles.chipOn]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                category === item && styles.chipTextOn,
+              ]}
+            >
+              {item}
+            </Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+
+      {featured.length > 0 && category === 'Todas' && !search ? (
+        <View style={styles.featuredSection}>
+          <Text style={styles.heading}>Seleção em destaque ✨</Text>
+          <Text style={styles.featuredDescription}>
+            Algumas escolhas da boutique. Veja todos os produtos abaixo.
+          </Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.featuredList}
+          >
+            {featured.slice(0, 4).map(plant => (
+              <View key={plant.id} style={styles.featuredItem}>
+                <PlantCard
+                  fullWidth
+                  plant={plant}
+                  favorite={favorites.includes(plant.id)}
+                  onPress={() => router.push(`/plant/${plant.id}`)}
+                  onFavorite={() => toggleFavorite(plant.id)}
+                />
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      ) : null}
+
+      <View style={styles.sectionRow}>
+        <Text style={styles.heading}>Catálogo completo</Text>
+        <Text style={styles.count}>{filtered.length} produtos</Text>
+      </View>
+
+      {filtered.length > 0 ? (
+        <View style={styles.grid}>
+          {filtered.map(plant => (
+            <PlantCard
+              key={plant.id}
+              plant={plant}
+              favorite={favorites.includes(plant.id)}
+              onPress={() => router.push(`/plant/${plant.id}`)}
+              onFavorite={() => toggleFavorite(plant.id)}
+            />
+          ))}
+        </View>
+      ) : (
+        <Text style={styles.empty}>
+          Não encontramos plantas com essa busca. Tente outro nome ou categoria.
+        </Text>
+      )}
     </ScrollView>
-  </View>
-) : null}    <View style={styles.sectionRow}><Text style={styles.heading}>Catálogo completo</Text><Text style={styles.count}>{filtered.length} produtos</Text></View>
-    {filtered.length ? <View style={styles.grid}>{filtered.map(plant => <PlantCard key={plant.id} plant={plant} favorite={favorites.includes(plant.id)} onPress={() => router.push(`/plant/${plant.id}`)} onFavorite={() => toggleFavorite(plant.id)} />)}</View> : <Text style={styles.empty}>Não encontramos plantas com essa busca. Tente outro nome ou categoria.</Text>}
-  </ScrollView>;
+  );
 }
 const styles = StyleSheet.create({
   page: { flex: 1, backgroundColor: colors.cream }, content: { padding: 19, paddingBottom: 32 },
